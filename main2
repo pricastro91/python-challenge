@@ -1,0 +1,62 @@
+import os
+import csv
+
+# my variable
+BallotList = []
+Canidate_votes = {}
+Charles_Casper_Stockham = 0
+Diana_DeGette = 0
+Raymon_Anthony_Doane = 0
+
+
+#add path for election_data.csv file
+election_csv = os.path.join('.', 'Resources', 'election_data.csv')
+
+#open csv.file in read mode"""
+
+with open(election_csv, 'r') as csvfile:
+    csvreader = csv.reader(csvfile, delimiter=',')
+    header = next(csvreader)
+
+
+# loop through csv, extract candidate names and store them in a list
+    for row in csvreader:
+
+        BallotList.append(row[0])
+        TotalVotes = len(BallotList)
+        
+        if row[2] == "Charles Casper Stockham":
+                Charles_Casper_Stockham += 1
+                
+        elif row[2] == "Diana DeGette":
+                Diana_DeGette +=1
+                
+        elif row[2] == "Raymon Anthony Doane":
+               Raymon_Anthony_Doane +=1
+
+ #Canidate Calaulation
+    Canidate1 = round((Charles_Casper_Stockham/TotalVotes)*100,3)
+    Canidate2 = round((Diana_DeGette/TotalVotes)*100,3)
+    Canidate3 = round((Raymon_Anthony_Doane/TotalVotes)*100,3)
+
+    #Dictionary to hold the number of votes
+    Canidate_votes = {"Charles Casper Stockham": Charles_Casper_Stockham, "Diana DeGette": Diana_DeGette, "Raymon Anthony Doane": Raymon_Anthony_Doane }  
+
+    Election_winner = max(Canidate_votes, key=Canidate_votes.get)
+   
+#assign variables for output to be printed
+
+TitleResult = "Election Results\n--------------------------"
+TotalVotes = "\nTotal Votes: " + str(TotalVotes) + "\n--------------------------"
+CharlesVotes = "\nCharles Casper Stockham: " + str(Canidate1) + "%" + str({Charles_Casper_Stockham})
+DianaVotes = "\nDiana DeGette: " + str(Canidate2) + "%" + str({Diana_DeGette})
+RaymondVotes = "\nRaymon Anthony Doane: " + str(Canidate3) + "%" + str({Raymon_Anthony_Doane}) + "\n--------------------------"
+ElectionWinner = "\nWinner: " + str(Election_winner)
+
+ResultPrint = TitleResult + TotalVotes + CharlesVotes + DianaVotes + RaymondVotes + ElectionWinner
+
+#output the results in csv file
+txt_output = os.path.join(".", "Analysis", "ResultPyPool.txt")
+with open(txt_output, 'w') as textfile:
+    textfile.write(ResultPrint)
+    print(ResultPrint)
